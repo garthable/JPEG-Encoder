@@ -1,55 +1,33 @@
 import pandas as pd
-import numpy as mp
+import numpy as np
 
 from glob import glob
 
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
 import cv2
 
+import util as ut
+
 def main():
-    png_files = glob('inputImages/*.png')
-    jpg_files = glob('inputImages/*.jpg')
+    files = glob('inputImages/*')
+    images = []
 
-    num_png_files = len(png_files)
-    num_jpg_files = len(jpg_files)
+    for f in range(len(files)):
+        images.append(plt.imread(files[f]))
+
+    print(f'\nSuccessfully loaded', len(files), 'images.')
+
+    print("\n============ IMAGES ============")
+    for f in range(len(files)):
+        print(f'[{f}]:', files[f])
     
-    png_images = []
-    jpg_images = []
+    choice = int(input('\nEnter the number of the image to use: '))
 
-    print(f'\nSuccessfully loaded', num_png_files,  'PNG image(s) and', num_jpg_files, 'JPG image(s).')
-    
-    while True:
-        choice = input('\nSelect an image type (J/P): ')
+    print(files[choice], 'selected. Plotting images...')
 
-        match choice:
-            case 'j':
-                print(f"\n=== JPG FILES ===")
-                
-                for f in range(num_jpg_files):
-                    print(f'[{f}]:', jpg_files[f])
-                
-                choice = input('\nSelect an image: ')
-                print(jpg_files[int(choice)], 'selected.')
-                break
+    ut.plot_image(images[choice])
+    ut.plot_rgb(images[choice])
+    ut.plot_ycbcr(images[choice])
 
-
-            case 'p':
-                print(f"\n=== PNG FILES ===")
-
-                for f in range(num_png_files):
-                    print(f'[{f}]:', png_files[f])
-
-                choice = input('\nSelect an image: ')
-                print(jpg_files[int(choice)], 'selected.')
-                
-                print(f'Shape of the image:', jpg_images[choice])
-
-                break
-            case 'q':
-                print('\nExiting...')
-                break
-            case _:
-                print('Invalid input.')
-    
 if __name__ == "__main__":
     main()
