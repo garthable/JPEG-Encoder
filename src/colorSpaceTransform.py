@@ -36,27 +36,27 @@ def ycbcr_2_rgb(image):
     rgb = np.dot(image - offset, ycbcr_to_rgb_matrix.T)
     return np.clip(rgb, 0, 255)  # Ensure values remain in valid range
 
-# Test with a mock RGB image (3x3 pixels)
-mock_rgb_image = np.array([
-    [[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-    [[255, 255, 0], [0, 255, 255], [255, 0, 255]],
-    [[128, 128, 128], [64, 64, 64], [192, 192, 192]]
-], dtype=np.float32)
+# # Test with a mock RGB image (3x3 pixels)
+# mock_rgb_image = np.array([
+#     [[255, 0, 0], [0, 255, 0], [0, 0, 255]],
+#     [[255, 255, 0], [0, 255, 255], [255, 0, 255]],
+#     [[128, 128, 128], [64, 64, 64], [192, 192, 192]]
+# ], dtype=np.float32)
 
-# Step 1: Convert RGB to YCbCr
-ycbcr_image = rgb_2_ycbcr(mock_rgb_image)
+# # Step 1: Convert RGB to YCbCr
+# ycbcr_image = rgb_2_ycbcr(mock_rgb_image)
 
-# Step 2: Convert YCbCr back to RGB
-reconstructed_rgb_image = ycbcr_2_rgb(ycbcr_image)
+# # Step 2: Convert YCbCr back to RGB
+# reconstructed_rgb_image = ycbcr_2_rgb(ycbcr_image)
 
-# Display original RGB image
-print("Original RGB Image:")
-print(mock_rgb_image)
+# # Display original RGB image
+# print("Original RGB Image:")
+# print(mock_rgb_image)
 
-# Display YCbCr conversion
-print("\nConverted YCbCr Image:")
-print(ycbcr_image)
+# # Display YCbCr conversion
+# print("\nConverted YCbCr Image:")
+# print(ycbcr_image)
 
-# Display Reconstructed RGB image
-print("\nReconstructed RGB Image:")
-print(reconstructed_rgb_image)
+# # Display Reconstructed RGB image
+# print("\nReconstructed RGB Image:")
+# print(reconstructed_rgb_image)

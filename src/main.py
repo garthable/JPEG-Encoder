@@ -1,30 +1,55 @@
-from imageProcessor import *
-from colorSpaceTransform import *
-from dct import *
-from downSample import *
-from quantization import *
-from util import *
-import os
+import pandas as pd
+import numpy as mp
 
-inputImagesPath = 'inputImages'
+from glob import glob
 
-for path in os.listdir(inputImagesPath):
-    image = read_image(inputImagesPath + "/" + path)
-    if image is type(None):
-        continue
+import matplotlib.pylab as plt
+import cv2
 
-    # Encode
+def main():
+    png_files = glob('inputImages/*.png')
+    jpg_files = glob('inputImages/*.jpg')
 
-    image = rgb_2_ycbcr(image)
-    image = down_sample(image)
-    image = run_dct_on_image(image)
-    image = quantization(image)
-    write_image(image, path, output_type.ENCODED)
+    num_png_files = len(png_files)
+    num_jpg_files = len(jpg_files)
+    
+    png_images = []
+    jpg_images = []
 
-    # Decode
+    print(f'\nSuccessfully loaded', num_png_files,  'PNG image(s) and', num_jpg_files, 'JPG image(s).')
+    
+    while True:
+        choice = input('\nSelect an image type (J/P): ')
 
-    image = inverse_quantization(image)
-    image = run_inverse_dct_on_image(image)
-    image = up_sample(image)
-    image = ycbcr_2_rgb(image)
-    write_image(image, path, output_type.DECODED)
+        match choice:
+            case 'j':
+                print(f"\n=== JPG FILES ===")
+                
+                for f in range(num_jpg_files):
+                    print(f'[{f}]:', jpg_files[f])
+                
+                choice = input('\nSelect an image: ')
+                print(jpg_files[int(choice)], 'selected.')
+                break
+
+
+            case 'p':
+                print(f"\n=== PNG FILES ===")
+
+                for f in range(num_png_files):
+                    print(f'[{f}]:', png_files[f])
+
+                choice = input('\nSelect an image: ')
+                print(jpg_files[int(choice)], 'selected.')
+                
+                print(f'Shape of the image:', jpg_images[choice])
+
+                break
+            case 'q':
+                print('\nExiting...')
+                break
+            case _:
+                print('Invalid input.')
+    
+if __name__ == "__main__":
+    main()
