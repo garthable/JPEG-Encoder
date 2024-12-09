@@ -1,1 +1,6 @@
+<<<<<<< HEAD
+*__pycache__
+.DS_Store
+=======
 __pycache__
+>>>>>>> 8acd79f8370c4f0d99c1df721d8445a521b1b2e8
