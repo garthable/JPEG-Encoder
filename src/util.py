@@ -39,3 +39,17 @@ def plot_ycbcr(ycbcr_img):
   axs[2].set_title('Cr (Chrominance) Channel')
   plt.tight_layout()
   plt.show()
+
+def plot_subsampled_channels(y, cb, cr):
+    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+    axs[0].imshow(y, cmap='gray')
+    axs[0].axis('off')
+    axs[0].set_title('Y Channel')
+    axs[1].imshow(cb, cmap='coolwarm')
+    axs[1].axis('off')
+    axs[1].set_title('Subsampled Cb Channel')
+    axs[2].imshow(cr, cmap='coolwarm')
+    axs[2].axis('off')
+    axs[2].set_title('Subsampled Cr Channel')
+    plt.tight_layout()
+    plt.show()
