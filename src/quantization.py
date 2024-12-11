@@ -12,6 +12,7 @@ def quantization(dct_block):
     Returns:
         np.ndarray: Quantized 8x8 DCT block.
     """
+    
     # Define the quantization table
     quantization_table = np.array([
         [16, 11, 10, 16, 24, 40, 51, 61],
@@ -116,3 +117,4 @@ if __name__ == "__main__":
     main()
     
     
+
