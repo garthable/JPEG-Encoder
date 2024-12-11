@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from dct import inverse_dct  
+import dct as dc
 
 def quantization(dct_block):
     """
@@ -55,30 +55,64 @@ def inverse_quantization(quantized_block):
     # Perform inverse quantization
     reconstructed_block = quantized_block * quantization_table
 
-    # Perform inverse DCT
-    reconstructed_block = inverse_dct(reconstructed_block)
-
-    # Clip values to 0-255 range
-    reconstructed_block = np.clip(reconstructed_block, 0, 255)
-
-    # Convert to 8-bit unsigned integers
-    reconstructed_block = reconstructed_block.astype(np.uint8)
-
     return reconstructed_block
 
 
 # Example DCT block to test quantization and inverse quantization
-if __name__ == "__main__":
-    dct_block = np.array([
-        [230, -23, -7, 12, -3, 0, 0, 0],
-        [-34, 12, 8, -5, -2, 0, 0, 0],
-        [-15, -9, 7, -3, 1, 0, 0, 0],
-        [-3, -5, 3, 1, -1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
-    ])
+def main():
+    test_image = np.zeros((8, 8), dtype=int)
+    dct_block = np.zeros((8, 8), dtype=int)
+
+    for i in range(8):
+        for j in range(8):
+            test_image[i, j] = (i + j) * 16
+
+    print("Original Image:")
+    print(test_image)
+    plt.figure(figsize=(12, 4))
+    plt.subplot(1, 5, 1)
+    plt.imshow(test_image, cmap='gray')
+    plt.title("Original Image")
+    plt.colorbar(label="Intensity")
+
+    dct_block = dc.run_dct_on_image(test_image)
+    print("DCT Image:")
+    print(dct_block)
+    plt.subplot(1, 5, 2)
+    plt.imshow(dct_block, cmap='gray')
+    plt.title("DCT Image")
+    plt.colorbar(label="Intensity")
 
     quantized = quantization(dct_block)
-    reconstructed = inverse_quantization(quantized)
+    print('Quantized Image')
+    print(quantized)
+    plt.subplot(1, 5, 3)
+    plt.imshow(quantized, cmap='gray')
+    plt.title("Quantized Image")
+    plt.colorbar(label="Intensity")
+
+    unquantized = inverse_quantization(quantized)
+    print('Un-quantized Image')
+    print(unquantized)
+    plt.subplot(1, 5, 4)
+    plt.imshow(unquantized, cmap='gray')
+    plt.title("Un-quantized Image")
+    plt.colorbar(label="Intensity")
+
+    reconstructed = dc.inverse_dct(unquantized)
+    reconstructed= np.clip(reconstructed, 0, 255)
+    reconstructed = reconstructed.astype(np.uint8)
+    print('Reconstructed Image')
+    print(reconstructed)
+    plt.subplot(1, 5, 5)
+    plt.imshow(reconstructed, cmap='gray')
+    plt.title("Reconstructed Image")
+    plt.colorbar(label="Intensity")
+
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+    
+    

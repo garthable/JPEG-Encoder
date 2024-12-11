@@ -75,7 +75,7 @@ def inverse_dct(imageSeg):
     return out
 
 # Test example
-if __name__ == "__main__":
+def main():
     
     test_image = np.zeros((8, 8), dtype=int)
 
@@ -110,3 +110,5 @@ if __name__ == "__main__":
 
     plt.show()
     
+if __name__ == "__main__":
+    main()
