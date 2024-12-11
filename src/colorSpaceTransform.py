@@ -26,11 +26,14 @@ def ycbcr_to_rgb(ycbcr_image):
 
 def ycbcr_2_rgb(image):
     return image
+
+#add file
     
 filename = "../inputImages/pixel.png"
 img = Image.open(filename)
     
-width, height = img.size
+width = img.size
+height = img.size
 print('width :', width)
 print('height:', height)
 
