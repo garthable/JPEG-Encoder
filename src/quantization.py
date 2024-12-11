@@ -92,11 +92,11 @@ def main():
     plt.colorbar(label="Intensity")
 
     unquantized = inverse_quantization(quantized)
-    print('Un-quantized Image')
+    print('Dequantized Image')
     print(unquantized)
     plt.subplot(1, 5, 4)
     plt.imshow(unquantized, cmap='gray')
-    plt.title("Un-quantized Image")
+    plt.title("Dequantized Image")
     plt.colorbar(label="Intensity")
 
     reconstructed = dc.inverse_dct(unquantized)
