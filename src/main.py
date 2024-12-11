@@ -1,108 +1,63 @@
-import numpy as np
 
+import numpy as np
 from glob import glob
 
 import matplotlib.pyplot as plt
 
-# import cv2
-
-import util as ut
-import downSample as dt
-import colorSpaceTransform as ct
-
-
-def subsample(img):
-    img1 = cv2.imread('g4g.png', 0) 
-  
-    # Obtain the size of the original image 
-    [m, n] = img1.shape 
-    print('Image Shape:', m, n) 
-    
-    # Show original image 
-    print('Original Image:') 
-    plt.imshow(img1, cmap="gray") 
-    
-    
-    # Down sampling 
-    
-    # Assign a down sampling rate 
-    # Here we are down sampling the 
-    # image by 4 
-    f = 4
-    
-    # Create a matrix of all zeros for 
-    # downsampled values 
-    img2 = np.zeros((m//f, n//f), dtype=np.int) 
-    
-    # Assign the down sampled values from the original 
-    # image according to the down sampling frequency. 
-    # For example, if the down sampling rate f=2, take 
-    # pixel values from alternate rows and columns 
-    # and assign them in the matrix created above 
-    for i in range(0, m, f): 
-        for j in range(0, n, f): 
-            try: 
-    
-                img2[i//f][j//f] = img1[i][j] 
-            except IndexError: 
-                pass
-    
-    
-    # Show down sampled image 
-    print('Down Sampled Image:') 
-    plt.imshow(img2, cmap="gray") 
-    
-    
-    # Up sampling 
-    
-    # Create matrix of zeros to store the upsampled image 
-    img3 = np.zeros((m, n), dtype=np.int) 
-    # new size 
-    for i in range(0, m-1, f): 
-        for j in range(0, n-1, f): 
-            img3[i, j] = img2[i//f][j//f] 
-    
-    # Nearest neighbour interpolation-Replication 
-    # Replicating rows 
-    
-    for i in range(1, m-(f-1), f): 
-        for j in range(0, n-(f-1)): 
-            img3[i:i+(f-1), j] = img3[i-1, j] 
-    
-    # Replicating columns 
-    for i in range(0, m-1): 
-        for j in range(1, n-1, f): 
-            img3[i, j:j+(f-1)] = img3[i, j-1] 
-    
-    # Plot the up sampled image 
-    print('Up Sampled Image:') 
-    plt.imshow(img3, cmap="gray") 
+from dct import *
+from quantization import *
 
 def main():
-    files = glob('inputImages/*')
-    images = []
+    # Example 8x8 block
+    block = np.array([
+        [230 - 5 * i - 5 * j for j in range(8)] for i in range(8)
+    ])
 
-    for f in range(len(files)):
-        images.append(plt.imread(files[f]))
+    # Apply DCT
+    dct_block = dct(block)
 
-    print(f'\nSuccessfully loaded', len(files), 'images.')
+    # Quantize DCT coefficients
+    quantized = quantization(dct_block)
 
-    print("\n============ IMAGES ============")
-    for f in range(len(files)):
-        print(f'[{f}]:', files[f])
-    
-    choice = int(input('\nEnter the number of the image to use: '))
+    # Inverse Quantization
+    dequantized = inverse_quantization(quantized)
 
-    print(files[choice], 'selected.')
+    # Apply Inverse DCT
+    # reconstructed_block = inverse_dct(dequantized)
 
-    # UNCOMMENT TO PLOT 
-    ##########################
-    print('Plotting images...')
-    ut.plot_image(images[choice])
-    ut.plot_rgb(images[choice])
-    ut.plot_ycbcr(images[choice])
+    # Clip and convert to 8-bit
+    # reconstructed_block = np.clip(reconstructed_block, 0, 255).astype(np.uint8)
 
-    # ut.plot_subsampled_channels(dt.chroma_subsampling())
+
+    # Display original and reconstructed blocks
+    plt.subplot(1, 4, 1)
+    plt.imshow(block, cmap='gray')
+    plt.title("Original Block")
+    plt.colorbar()
+
+    plt.subplot(1, 4, 2)
+    plt.imshow(dct_block, cmap='gray')
+    plt.title("DCT Block")
+    plt.colorbar()
+
+    plt.subplot(1, 4, 3)
+    plt.imshow(quantized, cmap='gray')
+    plt.title("Quantized Block")
+    plt.colorbar()
+
+    plt.subplot(1, 4, 4)
+    plt.imshow(dequantized, cmap='gray')
+    plt.title("Dequantized Block")
+    plt.colorbar()
+
+    print(block)
+    print(dct_block)
+    print(quantized)
+    print(dequantized)
+
+    # assert dct_block.all() == quantized.all()
+
+    plt.show()
 
 if __name__ == "__main__":
     main()
