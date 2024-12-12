@@ -1,15 +1,8 @@
 import matplotlib.pyplot as plt
+from PIL import Image 
+from glob import glob
 
-
-
-def plot_image(img):
-  # Display the images
-  fig, ax = plt.subplots(figsize=(10, 10))
-  ax.imshow(img)
-  ax.axis('off')
-  plt.show()
-
-def plot_rgb(img):
+def plot_rgb(img, plot_channels ):
   # Display RGB Channels of our image
   fig, axs = plt.subplots(1, 4, figsize=(15, 5))
   axs[0].imshow(img)

@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np;
 from PIL import Image;
 
@@ -58,3 +59,47 @@ for y in range(height):
         print(f'| Y: {Y:6.2f} | Cb: {Cb:6.2f} | Cr: {Cr:6.2f} |')
  
 print(count)
+
+def main():
+    file_names = get_images()
+
+    with Image.open(file_names[4]) as im:
+        ycbcr = im.convert('YCbCr')
+        # print(im.getchannel('Y'))
+        y, cb, cr = ycbcr.split()
+
+        cb_down = np.array(cb)[::2, ::2]
+        cr_down = np.array(cr)[::2, ::2]
+
+        cb_up = ds.upsample(cb_down, np.array(cb).shape)
+        cr_up = ds.upsample(cr_down, np.array(cr).shape)
+
+    plt.figure(figsize=(16, 4))
+
+    plt.subplot(1, 4, 1)
+    plt.imshow(ycbcr, cmap='gray')
+    plt.title("YCbCr Image")
+    plt.colorbar()
+
+    plt.subplot(1, 4, 2)
+    plt.imshow(y, cmap='gray')
+    plt.title("Y Channel")
+    plt.colorbar()
+
+    plt.subplot(1, 4, 3)
+    plt.imshow(cb_up, cmap='gray')
+    plt.title("Cb Channel (after processing)")
+    plt.colorbar()
+
+    plt.subplot(1, 4, 4)
+    plt.imshow(cr_up, cmap='gray')
+    plt.title("Cr Channel (after processing)")
+    plt.colorbar()
+
+    plt.show()
+
+    print('in main')
+
+if __name__ == '__main__':
+    main()
+

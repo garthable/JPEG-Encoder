@@ -1,63 +1,89 @@
-
 import numpy as np
 from glob import glob
+import cv2
 
 import matplotlib.pyplot as plt
 
 from dct import *
+from util import *
 from quantization import *
 
+import downSample as ds
+
 def main():
-    # Example 8x8 block
-    block = np.array([
-        [230 - 5 * i - 5 * j for j in range(8)] for i in range(8)
-    ])
+    file_names = get_images()
 
-    # Apply DCT
-    dct_block = dct(block)
+    with Image.open(file_names[4]) as im:
+        rgb = im.convert('RGB')
+        ycbcr = im.convert('YCbCr')
 
-    # Quantize DCT coefficients
-    quantized = quantization(dct_block)
+        r, g, b = rgb.split()
+        y, cb, cr = ycbcr.split()
 
-    # Inverse Quantization
-    dequantized = inverse_quantization(quantized)
+        cb_down = np.array(cb)[::2, ::2]
+        cr_down = np.array(cr)[::2, ::2]
 
-    # Apply Inverse DCT
-    # reconstructed_block = inverse_dct(dequantized)
+        cb_up = ds.upsample(cb_down, np.array(cb).shape)
+        cr_up = ds.upsample(cr_down, np.array(cr).shape)
 
-    # Clip and convert to 8-bit
-    # reconstructed_block = np.clip(reconstructed_block, 0, 255).astype(np.uint8)
+    plt.figure(figsize=(16, 4))
+
+    choice = 'rgb'
+    if choice = 'rgb':
+    
+    elif choice = 'ycbcr':
+    
 
 
-    # Display original and reconstructed blocks
+    # plt.subplot(1, 4, 1)
+    # plt.imshow(ycbcr, cmap='gray')
+    # plt.title("YCbCr Image")
+    # plt.colorbar()
+
+    # plt.subplot(1, 4, 2)
+    # plt.imshow(y, cmap='gray')
+    # plt.title("Y Channel")
+    # plt.colorbar()
+
+    # plt.subplot(1, 4, 3)
+    # plt.imshow(cb, cmap='gray')
+    # plt.title("Cb Channel")
+    # plt.colorbar()
+
+
+    # plt.subplot(1, 4, 4)
+    # plt.imshow(cr, cmap='gray')
+    # plt.title("Cr Channel")
+    # plt.colorbar()
+
+    # plt.show()
+
+
+
     plt.subplot(1, 4, 1)
-    plt.imshow(block, cmap='gray')
-    plt.title("Original Block")
+    plt.imshow(ycbcr, cmap='gray')
+    plt.title("RGB Image")
     plt.colorbar()
 
     plt.subplot(1, 4, 2)
-    plt.imshow(dct_block, cmap='gray')
-    plt.title("DCT Block")
+    plt.imshow(y, cmap='Reds')
+    plt.title("R Channel")
     plt.colorbar()
 
     plt.subplot(1, 4, 3)
-    plt.imshow(quantized, cmap='gray')
-    plt.title("Quantized Block")
+    plt.imshow(cb, cmap='Greens')
+    plt.title("G Channel")
     plt.colorbar()
 
     plt.subplot(1, 4, 4)
-    plt.imshow(dequantized, cmap='gray')
-    plt.title("Dequantized Block")
+    plt.imshow(cr, cmap='Blues')
+    plt.title("B Channel")
     plt.colorbar()
 
-    print(block)
-    print(dct_block)
-    print(quantized)
-    print(dequantized)
-
-    # assert dct_block.all() == quantized.all()
-
     plt.show()
+
+    
+
 
 if __name__ == "__main__":
     main()
